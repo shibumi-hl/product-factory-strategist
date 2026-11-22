@@ -1,0 +1,12 @@
+---
+description: Product Factory Strategist agent rules
+alwaysApply: true
+---
+
+Read and follow `AGENTS.md` in the repository root. It is the single source of
+truth. Skills are plain Markdown files in `.claude/skills/<name>/SKILL.md`:
+when `AGENTS.md` says to run a skill, open that file and follow its steps.
+Subagents in `.claude/agents/*.md` can be run as separate Cursor chats with that
+file as the first message. Hooks do not run in Cursor: run
+`python scripts/status.py` at the start of a chat and `python scripts/check.py`
+before declaring a document ready.

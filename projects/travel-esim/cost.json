@@ -1,0 +1,56 @@
+{
+  "note": "Model token cost per Claude Code session, written by scripts/cost.py (Stop hook). Prices from config/pricing.json. Excludes search/tool fees and human time.",
+  "sessions": {
+    "test-agent-1 (frame to options)": {
+      "updated": "2026-11-17T18:51:24",
+      "usd": 1.5415,
+      "models": {
+        "claude-opus-5-5": {
+          "input": 58,
+          "output": 27590,
+          "cache_read": 2015444,
+          "cache_write": 117283,
+          "messages": 25,
+          "usd": 1.5415
+        }
+      }
+    },
+    "test-agent-2 (resume to reassess)": {
+      "updated": "2026-11-17T18:51:24",
+      "usd": 2.0634,
+      "models": {
+        "claude-opus-5-5": {
+          "input": 68,
+          "output": 44530,
+          "cache_read": 3223269,
+          "cache_write": 105570,
+          "messages": 31,
+          "usd": 2.0634
+        }
+      }
+    },
+    "42456756-9904-4f9b-a0b4-d26f25ec83f3": {
+      "updated": "2026-11-17T19:19:40",
+      "usd": 0.6042,
+      "models": {
+        "claude-opus-5-5": {
+          "input": 22,
+          "output": 3087,
+          "cache_read": 688962,
+          "cache_write": 80360,
+          "messages": 10,
+          "usd": 0.6014
+        },
+        "claude-haiku-5-5": {
+          "input": 4,
+          "output": 2625,
+          "cache_read": 7721,
+          "cache_write": 11218,
+          "messages": 2,
+          "usd": 0.0028
+        }
+      }
+    }
+  },
+  "total_usd": 4.2091
+}
