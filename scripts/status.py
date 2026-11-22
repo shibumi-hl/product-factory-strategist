@@ -35,6 +35,10 @@ def report(slug: str | None) -> str:
     remaining = section(state, "Remaining work")
     if remaining:
         out.append("Remaining work:\n" + remaining)
+    stale = stale_state(pdir, state)
+    if stale:
+        out.append("WARNING: state.md looks stale (" + stale + "). Rebuild Done / Remaining work / Next step "
+                   "from the project files and log.md before continuing (checkpoint skill).")
     unknowns = section(state, "Unknowns")
     if unknowns:
         out.append("Unknowns:\n" + unknowns)
@@ -55,6 +59,20 @@ def report(slug: str | None) -> str:
     if log_lines:
         out.append("Last action: " + log_lines[-1][2:])
     return "\n".join(out)
+
+
+def stale_state(pdir, state: str) -> str:
+    """Cheap signs that the checkpoint skill was skipped."""
+    stage = section(state, "Stage").strip()
+    if stage != "new" and "Frame the task" in section(state, "Remaining work"):
+        return "template 'Frame the task' still listed after framing"
+    log_lines = [l for l in read(pdir / "log.md").splitlines() if l.startswith("- ")]
+    last_stage = log_lines[-1].split("|")[1].strip() if log_lines and log_lines[-1].count("|") >= 2 else ""
+    order = ["new", "frame", "framed", "research-plan", "planned", "collect", "analyze-data", "researched",
+             "options", "option-chosen", "strategy", "red-team", "approved", "decision-log", "tracking", "retro"]
+    if stage in order and last_stage in order and order.index(last_stage) > order.index(stage) + 3:
+        return f"stage '{stage}' but log.md is already at '{last_stage}'"
+    return ""
 
 
 def load_cost(pdir) -> dict | None:

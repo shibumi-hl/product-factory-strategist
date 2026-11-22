@@ -30,6 +30,11 @@ git clone <this repo> && cd product-factory-strategist
 claude
 ```
 
+Open **this folder itself** (`product-factory-strategist`), not a folder above
+it: Claude Code loads `CLAUDE.md`, the skills and the hooks only from the folder
+a session starts in. If a new chat does not begin with the project state, it
+was opened in the wrong folder.
+
 On the first launch accept the workspace trust dialog: until you do, Claude Code
 ignores the permission allow-list in `.claude/settings.json`.
 
