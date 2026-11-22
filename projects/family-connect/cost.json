@@ -22,7 +22,21 @@
           "usd": 0.0433
         }
       }
+    },
+    "2995a524-3a17-4000-9730-b5d1b5225ee0": {
+      "updated": "2026-11-22T15:57:20",
+      "usd": 0.4603,
+      "models": {
+        "claude-opus-5-5": {
+          "input": 26,
+          "output": 4340,
+          "cache_read": 940069,
+          "cache_write": 37080,
+          "messages": 12,
+          "usd": 0.4603
+        }
+      }
     }
   },
-  "total_usd": 9.6467
+  "total_usd": 10.107
 }
