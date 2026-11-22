@@ -5,6 +5,9 @@ scripts) that helps a digital product manager go from an ambiguous request to
 a well-grounded product and communication strategy, and keeps supporting them
 after the decision. It is opened in an AI IDE, not deployed as an app.
 
+**Documentation (RU, PDF):** [`docs/export/documentation.ru.pdf`](docs/export/documentation.ru.pdf) ·
+**Demo result (RU, PDF):** [`projects/family-connect/export/deliverable.pdf`](projects/family-connect/export/deliverable.pdf)
+
 Built for the MegaFon Product Factory case. Skills adapt patterns from
 [obra/superpowers](https://github.com/obra/superpowers),
 [mattpocock/skills](https://github.com/mattpocock/skills) and

@@ -32,7 +32,12 @@ code{background:#f3f3f3;padding:1px 4px;border-radius:3px;font-size:13px}
 pre{background:#f6f6f6;padding:10px;overflow-x:auto}blockquote{border-left:3px solid #ccc;margin:8px 0;padding:2px 12px;color:#555}
 a.e{color:#0b5cad;text-decoration:none;font-size:12px}hr{border:0;border-top:1px solid #ddd;margin:24px 0}
 .meta{color:#666;font-size:12px}#evidence td{font-size:11.5px}
-@media print{body{margin:0;max-width:none}h2{page-break-after:avoid}tr{page-break-inside:avoid}}
+figure{margin:14px 0;text-align:center}figure img{max-width:100%;border:1px solid #ddd}
+figcaption{font-size:12px;color:#666;margin-top:4px}svg{max-width:100%;height:auto}
+.chat{border:1px solid #d6dbe3;border-radius:6px;background:#f7f9fc;padding:8px 12px;margin:10px 0;font-size:13px}
+.chat b{color:#0b5cad}
+@media print{body{margin:0;max-width:none}h2,h3,h4{page-break-after:avoid;break-after:avoid}
+tr,svg,figure,.chat{page-break-inside:avoid;break-inside:avoid}}
 """
 
 
@@ -45,7 +50,9 @@ def inline(text: str) -> str:
 
     text = re.sub(r"`([^`]+)`", keep, text)
     text = html.escape(text, quote=False)
-    text = re.sub(r"\[([^\]]+)\]\(([^)\s]+)\)", r'<a href="\2">\1</a>', text)
+    text = re.sub(r"!\[([^\]]*)\]\(([^)\s]+)\)",
+                  r'<figure><img src="\2" alt="\1"><figcaption>\1</figcaption></figure>', text)
+    text = re.sub(r"(?<!!)\[([^\]]+)\]\(([^)\s]+)\)", r'<a href="\2">\1</a>', text)
     text = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", text)
     text = re.sub(r"(?<![\w*])\*(?!\s)(.+?)(?<!\s)\*(?![\w*])", r"<em>\1</em>", text)
     text = re.sub(r"(?<![\w])_(?!\s)(.+?)(?<!\s)_(?![\w])", r"<em>\1</em>", text)
@@ -83,6 +90,15 @@ def to_html(md: str) -> str:
             flush()
             while i < len(lines) and "-->" not in lines[i]:
                 i += 1
+        elif re.match(r"<(svg|figure|div|table)\b", s):
+            # raw HTML block (diagrams, layout): copied as is up to the first blank line
+            flush()
+            block = []
+            while i < len(lines) and lines[i].strip():
+                block.append(lines[i])
+                i += 1
+            out.append("\n".join(block))
+            continue
         elif not s:
             flush()
         elif m := re.match(r"(#{1,6})\s+(.*)", s):
@@ -151,7 +167,7 @@ def render_list(lines: list[str], i: int, out: list[str]) -> int:
 def evidence_appendix(pdir: Path, body: str) -> str:
     rows, _ = parse_ledger(pdir / "evidence.md")
     cited = sorted(set(re.findall(r'href="#(E-\d{3,})"', body)), key=lambda x: int(x[2:]))
-    if not cited:
+    if not cited or not any(eid in rows for eid in cited):
         return ""
     trs = []
     for eid in cited:
@@ -201,6 +217,8 @@ def main(argv: list[str]) -> int:
     md = src.read_text(encoding="utf-8")
     title = next((l[2:].strip() for l in md.splitlines() if l.startswith("# ")), src.stem)
     body = to_html(md)
+    # output lives in <dir>/export/: keep relative image paths pointing at the source's folder
+    body = re.sub(r'(<img src=")(?!https?:|/|data:|\.\./)', r"\1../", body)
     body += evidence_appendix(pdir, body)
     doc = (f'<!doctype html><html lang="ru"><head><meta charset="utf-8">'
            f'<meta name="viewport" content="width=device-width,initial-scale=1">'
