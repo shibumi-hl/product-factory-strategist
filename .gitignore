@@ -3,3 +3,10 @@
 .claude/settings.local.json
 __pycache__/
 *.pyc
+
+# screen recordings / videos are submitted by link, never committed
+*.mp4
+*.mkv
+*.mov
+*.avi
+*.webm
